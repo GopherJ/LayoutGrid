@@ -62,7 +62,7 @@ config.module = {
                 loader: 'css-loader'
             }, {
                 loader: 'postcss-loader',
-                options: {         
+                options: {
                     plugins: (loader) => [
                         require('postcss-import')({root: loader.resourcePath}),
                         require('autoprefixer')(), // browser compatibility
@@ -88,7 +88,7 @@ config.module = {
 };
 process.traceDeprecation = true;
 if (process.env.NODE_ENV === 'production') {
-    config.output.filename = "LayoutGrid.min.js"
+    config.output.filename = "LayoutGrid.min.js";
     config.devtool = '#source-map';
 
     // Pass build environment inside bundle
