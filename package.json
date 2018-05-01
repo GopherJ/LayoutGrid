@@ -1,5 +1,5 @@
 {
-  "name": "LayoutGrid",
+  "name": "layout-grid",
   "version": "0.0.1",
   "description": "layout gridster with vue",
   "main": "dist/LayoutGrid.min.js",

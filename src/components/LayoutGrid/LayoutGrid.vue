@@ -90,7 +90,6 @@
     import VueGridLayout from 'vue-grid-layout';
     import {mapMutations, mapState} from 'vuex';
     import Emotion from './Emotion';
-    import uuid from 'uuid/v1';
 
     export default {
         name: 'layout-grid',
