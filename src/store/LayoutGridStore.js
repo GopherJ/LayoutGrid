@@ -39,6 +39,9 @@ const mutations = {
     },
     COLLAPSE_LAYOUT_ITEM({layout, layoutCache}) {
         cloneLayout(layoutCache, layout);
+    },
+    SET_LAYOUT(state, layout) {
+        state.layout = _.cloneDeep(layout);
     }
 };
 

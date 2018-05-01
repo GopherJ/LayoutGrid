@@ -7,7 +7,7 @@
             :margin="margin"
             :is-draggable="editable"
             :is-resizable="editable"
-            @layout-updated="(n) => $emit('updated', n)">
+            @layout-updated="(n) => onLayoutUpdated(n)">
 
             <grid-item
                 v-for="(l, idx) of layout"
@@ -17,10 +17,10 @@
                 :h="l.h"
                 :i="l.i"
                 :min-w="minW"
-                @resize="(i, h, w) => $emit('resize', i, h, w)"
+                @resize="(i, h, w) => onResize(i, h, w)"
                 @move="(i, x, y) => $emit('move', i, x, y)"
                 @moved="(i, x, y) => $emit('moved', i, x, y)"
-                @resized="(i, h, w, hpx, wpx) => $emit('resized', i, h, w, hpx, wpx)"
+                @resized="(i, h, w, hpx, wpx) => onResized(i, h, w, hpx, wpx)"
                 drag-allow-from=".layout-grid-item-header-title"
                 drag-ignore-from=".layout-grid-item-content"
                 :key="l.i">
@@ -75,6 +75,7 @@
                     <div class="layout-grid-item-content" :style="{ height : `${GetHeight(l.h) }` }">
 
                         <component
+                            :ref="GetRef(l.i)"
                             :is="l.is && l.data ? l.is : 'emotion'"
                             v-bind="l.data || null">
                         </component>
@@ -88,7 +89,7 @@
 <script>
     /* eslint-disable */
     import VueGridLayout from 'vue-grid-layout';
-    import {mapMutations, mapState} from 'vuex';
+    import {mapMutations, mapState, mapGetters} from 'vuex';
     import Emotion from './Emotion';
 
     export default {
@@ -120,11 +121,30 @@
             GetHeight(h) {
                 return `${h * this.rowHeight - 30}px`;
             },
+            GetRef(i) {
+                return `LayoutGridItem${i}`;
+            },
             ...mapMutations('LayoutGrid', [
                 'EXPAND_LAYOUT_ITEM',
                 'DELETE_LAYOUT_ITEM',
-                'COLLAPSE_LAYOUT_ITEM'
-            ])
+                'COLLAPSE_LAYOUT_ITEM',
+                'SET_LAYOUT'
+            ]),
+            onResize(i, h, w) {
+                this.$emit('resize', i, h, w);
+
+                this.$refs[this.GetRef(i)][0].safeDraw();
+            },
+            onResized(i, h, w, hpx, wpx) {
+                this.$emit('resized', i, h, w, hpx, wpx);
+
+                this.$refs[this.GetRef(i)][0].safeDraw();
+            },
+            onLayoutUpdated(n) {
+                this.$emit('updated', n);
+
+                this.SET_LAYOUT(n);
+            }
         },
         computed: {
             ...mapState('LayoutGrid', [
@@ -153,10 +173,10 @@
         /*border: 2px dashed #888;*/
 
         /*https://codepen.io/Hawkun/pen/rsIEp*/
-        box-shadow: 2px 0 0 0 #888,
-        0 2px 0 0 #888,
-        2px 2px 0 0 #888, /* Just to fix the corner */ 2px 0 0 0 #888 inset,
-        0 2px 0 0 #888 inset;
+        box-shadow: 2px 0 0 0 #e4e4e4,
+        0 2px 0 0 #e4e4e4,
+        2px 2px 0 0 #e4e4e4, /* Just to fix the corner */ 2px 0 0 0 #e4e4e4 inset,
+        0 2px 0 0 #e4e4e4 inset;
     }
 
     .layout-grid-item-header {
