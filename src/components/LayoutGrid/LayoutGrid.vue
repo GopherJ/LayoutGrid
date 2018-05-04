@@ -57,7 +57,7 @@
 
                                 <div class="level-item">
                                     <span class="icon">
-                                        <i class="mdi mdi-pencil mdi-18px" @click="$emit('edit', l.i)"></i>
+                                        <i class="mdi mdi-pencil mdi-18px" @click="onEdit(l.i)"></i>
                                     </span>
                                 </div>
 
@@ -89,7 +89,7 @@
 <script>
     /* eslint-disable */
     import VueGridLayout from 'vue-grid-layout';
-    import {mapMutations, mapState, mapGetters} from 'vuex';
+    import {mapMutations, mapState} from 'vuex';
     import Emotion from './Emotion';
 
     export default {
@@ -128,22 +128,33 @@
                 'EXPAND_LAYOUT_ITEM',
                 'DELETE_LAYOUT_ITEM',
                 'COLLAPSE_LAYOUT_ITEM',
-                'SET_LAYOUT'
             ]),
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
 
-                this.$refs[this.GetRef(i)][0].safeDraw();
+                if (this.$refs[this.GetRef(i)][0].safeDraw) {
+                    this.$refs[this.GetRef(i)][0].safeDraw();
+                }
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
 
-                this.$refs[this.GetRef(i)][0].safeDraw();
+                if (this.$refs[this.GetRef(i)][0].safeDraw) {
+                    this.$refs[this.GetRef(i)][0].safeDraw();
+                }
             },
             onLayoutUpdated(n) {
                 this.$emit('updated', n);
+            },
+            onEdit(i) {
+                this.$emit('edit', i);
 
-                this.SET_LAYOUT(n);
+                if (this.$root) {
+                    this.$root.$emit('layout-item-edit', {
+                        i,
+                        payload: null
+                    });
+                }
             }
         },
         computed: {
