@@ -1,5 +1,5 @@
 <template>
-    <div class="layout-grid">
+    <div class="layout-grid" ref="LayoutGrid">
 
         <grid-layout
             :layout="layout"
@@ -78,7 +78,7 @@
                         <component
                             :ref="GetRef(l.i)"
                             :is="canRender(l) ? l.is : 'emotion'"
-                            v-bind="l.data || null">
+                            v-bind="canRender(l) ? l.data : null">
                         </component>
                     </div>
                 </div>
@@ -168,12 +168,14 @@
                     case 'd3-timeline':
                     case 'd3-timelion':
                     case 'd3-multi-line':
+                    case 'd3-table':
                         return l.data.data.length > 0;
                         break;
                     case 'd3-sankey-circular':
                         return l.data.nodes.length > 0 && l.data.links.length > 0;
                         break;
                     case 'd3-metric':
+                    case 'd3-circle':
                         return typeof l.data.data === 'number' || typeof l.data.data === 'string';
                         break;
                     default:
@@ -191,6 +193,17 @@
             GridLayout: VueGridLayout.GridLayout,
             GridItem: VueGridLayout.GridItem,
             Emotion
+        },
+        mounted() {
+            this.unwatch =  this.$watch(vm => vm.layout.length, function (n, o) {
+                // item added or updated
+                if (n >= o) {
+                    window.dispatchEvent(new Event('resize'));
+                }
+            });
+        },
+        beforeDestroy() {
+            this.unwatch();
         }
     }
 </script>
