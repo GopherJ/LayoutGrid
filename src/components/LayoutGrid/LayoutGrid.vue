@@ -23,6 +23,7 @@
                 @resized="(i, h, w, hpx, wpx) => onResized(i, h, w, hpx, wpx)"
                 drag-allow-from=".layout-grid-item-header-title"
                 drag-ignore-from=".layout-grid-item-content"
+                v-if="l.show"
                 :key="l.i">
 
                 <div class="layout-grid-item" :class="{ 'layout-grid-item-border': editable }">
@@ -30,7 +31,7 @@
                     <div class="layout-grid-item-header">
                         <div class="level is-mobile">
 
-                            <div class="level-left" style="margin: 0 auto;">
+                            <div class="level-left">
                                 <div class="level-item">
                                     <span class="layout-grid-item-header-title">
                                         {{ l.title || l.is }}
@@ -76,7 +77,7 @@
 
                         <component
                             :ref="GetRef(l.i)"
-                            :is="l.is && l.data ? l.is : 'emotion'"
+                            :is="canRender(l) ? l.is : 'emotion'"
                             v-bind="l.data || null">
                         </component>
                     </div>
@@ -132,6 +133,7 @@
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
 
+                // dynamic component
                 if (this.$refs[this.GetRef(i)][0].safeDraw) {
                     this.$refs[this.GetRef(i)][0].safeDraw();
                 }
@@ -139,6 +141,7 @@
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
 
+                // dynamic component
                 if (this.$refs[this.GetRef(i)][0].safeDraw) {
                     this.$refs[this.GetRef(i)][0].safeDraw();
                 }
@@ -155,7 +158,29 @@
                         payload: null
                     });
                 }
-            }
+            },
+            canRender(l) {
+                // design for https://github.com/GopherJ/LayoutGrid
+                switch (l.is) {
+                    case 'd3-pie':
+                    case 'd3-bar':
+                    case 'd3-line':
+                    case 'd3-timeline':
+                    case 'd3-timelion':
+                    case 'd3-multi-line':
+                        return l.data.data.length > 0;
+                        break;
+                    case 'd3-sankey-circular':
+                        return l.data.nodes.length > 0 && l.data.links.length > 0;
+                        break;
+                    case 'd3-metric':
+                        return typeof l.data.data === 'number' || typeof l.data.data === 'string';
+                        break;
+                    default:
+                        return l.is && l.data;
+                        break;
+                }
+            },
         },
         computed: {
             ...mapState('LayoutGrid', [
@@ -186,7 +211,8 @@
         /*https://codepen.io/Hawkun/pen/rsIEp*/
         box-shadow: 2px 0 0 0 #e4e4e4,
         0 2px 0 0 #e4e4e4,
-        2px 2px 0 0 #e4e4e4, /* Just to fix the corner */ 2px 0 0 0 #e4e4e4 inset,
+        2px 2px 0 0 #e4e4e4,
+        2px 0 0 0 #e4e4e4 inset,
         0 2px 0 0 #e4e4e4 inset;
     }
 
@@ -203,6 +229,9 @@
 
         word-break: break-all;
         word-wrap: break-word;
+
+        position: relative;
+        left: 2px;
     }
 
     .layout-grid-item-content {
