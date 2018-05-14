@@ -77,7 +77,7 @@ const getters = {
     },
     GET_LAYOUT_CONFIG(state) {
         const layout = state.layout,
-            layoutConfig = [];
+            LayoutConfig = [];
 
         for (let i = 0, l = layout.length; i < l; i += 1) {
             const layoutItem = cloneLayoutItem(layout, i);
@@ -89,30 +89,32 @@ const getters = {
                 case 'd3-timeline':
                 case 'd3-timelion':
                 case 'd3-multi-line':
+                case 'd3-table':
                     layoutItem.data.data = [];
 
-                    layoutConfig.push(layoutItem);
+                    LayoutConfig.push(layoutItem);
                     break;
                 case 'd3-sankey-circular':
                     layoutItem.data.nodes = [];
                     layoutItem.data.links = [];
 
-                    layoutConfig.push(layoutItem);
+                    LayoutConfig.push(layoutItem);
                     break;
                 case 'd3-metric':
+                case 'd3-circle':
                     layoutItem.data.data = null;
 
-                    layoutConfig.push(layoutItem);
+                    LayoutConfig.push(layoutItem);
                     break;
                 default:
                     layoutItem.data = null;
 
-                    layoutConfig.push(layoutItem);
+                    LayoutConfig.push(layoutItem);
                     break;
             }
         }
 
-        return layoutConfig;
+        return LayoutConfig;
     }
 };
 

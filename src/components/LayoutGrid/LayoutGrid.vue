@@ -152,6 +152,7 @@
             onEdit(i) {
                 this.$emit('edit', i);
 
+                // design for https://github.com/GopherJ/Vs
                 if (this.$root) {
                     this.$root.$emit('layout-item-edit', {
                         i,
@@ -160,7 +161,7 @@
                 }
             },
             canRender(l) {
-                // design for https://github.com/GopherJ/LayoutGrid
+                // design for https://github.com/GopherJ/Vs
                 switch (l.is) {
                     case 'd3-pie':
                     case 'd3-bar':
