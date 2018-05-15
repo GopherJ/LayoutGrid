@@ -34,7 +34,7 @@
                             <div class="level-left">
                                 <div class="level-item">
                                     <span class="layout-grid-item-header-title">
-                                        {{ l.title || l.is }}
+                                        {{ l.title || null }}
                                     </span>
                                 </div>
                             </div>
@@ -171,17 +171,13 @@
                     case 'd3-multi-line':
                     case 'd3-table':
                         return l.data.data.length > 0;
-                        break;
                     case 'd3-sankey-circular':
                         return l.data.nodes.length > 0 && l.data.links.length > 0;
-                        break;
                     case 'd3-metric':
                     case 'd3-circle':
                         return typeof l.data.data === 'number' || typeof l.data.data === 'string';
-                        break;
                     default:
                         return l.is && l.data;
-                        break;
                 }
             },
         },
