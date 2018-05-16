@@ -262,14 +262,6 @@
         overflow: hidden;
     }
 
-    .layout-grid >>> .vue-grid-item.vue-grid-placeholder {
-        display: none;
-    }
-
-    .layout-grid >>> .vue-grid-item > .vue-resizable-handle {
-        background-position: unset;
-    }
-
     .icon {
         transition: .3s opacity;
         opacity: .4;
@@ -278,5 +270,16 @@
 
     .icon:hover {
         opacity: 1;
+    }
+</style>
+
+<style>
+    .vue-grid-item.vue-grid-placeholder {
+        display: none;
+    }
+
+
+    .vue-grid-item > .vue-resizable-handle {
+        background-position: unset;
     }
 </style>
