@@ -89,7 +89,7 @@
 
                     <span class="icon" style="position: absolute; left: 0; bottom: 0;"
                           v-if="Array.isArray(l.data.data)"
-                          @click="test">
+                          @click="toggle">
                           <i class="mdi mdi-18px"
                              :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
                                'mdi-arrow-up-drop-circle-outline': !isTableOpen
@@ -141,7 +141,7 @@
                 'DELETE_LAYOUT_ITEM',
                 'COLLAPSE_LAYOUT_ITEM',
             ]),
-            test(ev) {
+            toggle(ev) {
                 const element = ev.target.parentNode.parentNode.querySelector('.layout-grid-item-content').childNodes[0],
                     table = element.nextSibling.nextSibling;
 

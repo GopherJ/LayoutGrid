@@ -9,7 +9,7 @@
         paginated
         :per-page="perPage">
         <template slot-scope="props">
-            <b-table-column v-for="(value, key) in props.row" :field="key" :label="key" centered>
+            <b-table-column v-for="(value, key) in props.row" :field="key" :label="key" :key="key" centered>
                 {{ value }}
             </b-table-column>
         </template>
@@ -25,10 +25,12 @@
                 required: true
             },
             bordered: {
-                type: Boolean
+                type: Boolean,
+                default: true
             },
             narrowed: {
-                type: Boolean
+                type: Boolean,
+                default: false
             },
             focusable: {
                 type: Boolean
@@ -37,7 +39,8 @@
                 type: Boolean
             },
             striped: {
-                type: Boolean
+                type: Boolean,
+                default: true
             },
             perPage: {
                 type: Number,
