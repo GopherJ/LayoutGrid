@@ -84,7 +84,8 @@ const getters = {
 
             switch (layoutItem.is) {
                 case 'd3-pie':
-                case 'd3-bar':
+                case 'd3-horizontal-bar':
+                case 'd3-vertical-bar':
                 case 'd3-line':
                 case 'd3-timeline':
                 case 'd3-timelion':

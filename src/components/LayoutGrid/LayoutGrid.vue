@@ -89,7 +89,7 @@
 
                     <span class="icon" style="position: absolute; left: 0; bottom: 0;"
                           v-if="Array.isArray(l.data.data)"
-                          @click="isTableOpen = !isTableOpen">
+                          @click="test">
                           <i class="mdi mdi-18px"
                              :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
                                'mdi-arrow-up-drop-circle-outline': !isTableOpen
@@ -141,6 +141,13 @@
                 'DELETE_LAYOUT_ITEM',
                 'COLLAPSE_LAYOUT_ITEM',
             ]),
+            test(ev) {
+                const element = ev.target.parentNode.parentNode.querySelector('.layout-grid-item-content').childNodes[0],
+                    table = element.nextSibling.nextSibling;
+
+                    element.style.display = element.style.display === 'none' ? 'block' : 'none';
+                    table.style.display = element.style.display === 'block' ? 'none' : 'block';
+            },
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
 
@@ -270,7 +277,7 @@
         display: flex;
         display: -webkit-flex;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
 
         width: 100%;
 
