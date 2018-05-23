@@ -73,14 +73,29 @@
                         </div>
                     </div>
 
-                    <div class="layout-grid-item-content" :style="{ height : `${GetHeight(l.h) }` }">
+                    <div class="layout-grid-item-content" :style="{ height : `${l.h * rowHeight - 30}px` }">
 
-                        <component
-                            :ref="GetRef(l.i)"
-                            :is="canRender(l) ? l.is : 'emotion'"
-                            v-bind="canRender(l) ? l.data : null">
-                        </component>
+                        <transition name="slide">
+                            <component
+                                v-show="!isTableOpen"
+                                :ref="`LayoutGridItem${l.i}`"
+                                :is="canRender(l) ? l.is : 'emotion'"
+                                v-bind="canRender(l) ? l.data : null">
+                            </component>
+                        </transition>
+
+                        <Table v-show="isTableOpen" :data="l.data.data" v-if="Array.isArray(l.data.data)"></Table>
                     </div>
+
+                    <span class="icon" style="position: absolute; left: 0; bottom: 0;"
+                          v-if="Array.isArray(l.data.data)"
+                          @click="isTableOpen = !isTableOpen">
+                          <i class="mdi mdi-18px"
+                             :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
+                               'mdi-arrow-up-drop-circle-outline': !isTableOpen
+                             }">
+                          </i>
+                    </span>
                 </div>
             </grid-item>
         </grid-layout>
@@ -92,12 +107,14 @@
     import VueGridLayout from 'vue-grid-layout';
     import {mapMutations, mapState} from 'vuex';
     import Emotion from './Emotion';
+    import Table from './Table';
 
     export default {
         name: 'layout-grid',
         data() {
             return {
                 hasLayoutItemExpanded: false,
+                isTableOpen: false
             };
         },
         props: {
@@ -119,12 +136,6 @@
             }
         },
         methods: {
-            GetHeight(h) {
-                return `${h * this.rowHeight - 30}px`;
-            },
-            GetRef(i) {
-                return `LayoutGridItem${i}`;
-            },
             ...mapMutations('LayoutGrid', [
                 'EXPAND_LAYOUT_ITEM',
                 'DELETE_LAYOUT_ITEM',
@@ -134,16 +145,16 @@
                 this.$emit('resize', i, h, w);
 
                 // dynamic component
-                if (this.$refs[this.GetRef(i)][0].safeDraw) {
-                    this.$refs[this.GetRef(i)][0].safeDraw();
+                if (this.$refs[`LayoutGridItem${i}`][0].safeDraw) {
+                    this.$refs[`LayoutGridItem${i}`][0].safeDraw();
                 }
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
 
                 // dynamic component
-                if (this.$refs[this.GetRef(i)][0].safeDraw) {
-                    this.$refs[this.GetRef(i)][0].safeDraw();
+                if (this.$refs[`LayoutGridItem${i}`][0].safeDraw) {
+                    this.$refs[`LayoutGridItem${i}`][0].safeDraw();
                 }
             },
             onLayoutUpdated(n) {
@@ -153,7 +164,7 @@
                 this.$emit('edit', i);
 
                 // design for https://github.com/GopherJ/Vs
-                if (this.$root) {
+                if (this.$root !== this) {
                     this.$root.$emit('layout-item-edit', {
                         i,
                         payload: null
@@ -164,18 +175,19 @@
                 // design for https://github.com/GopherJ/Vs
                 switch (l.is) {
                     case 'd3-pie':
-                    case 'd3-bar':
+                    case 'd3-horizontal-bar':
+                    case 'd3-vertical-bar':
                     case 'd3-line':
                     case 'd3-timeline':
                     case 'd3-timelion':
                     case 'd3-multi-line':
                     case 'd3-table':
-                        return l.data.data.length > 0;
+                        return l.data && l.data.data && l.data.data.length > 0;
                     case 'd3-sankey-circular':
-                        return l.data.nodes.length > 0 && l.data.links.length > 0;
+                        return l.data && l.data.nodes && l.data.links && l.data.nodes.length > 0 && l.data.links.length > 0;
                     case 'd3-metric':
                     case 'd3-circle':
-                        return typeof l.data.data === 'number' || typeof l.data.data === 'string';
+                        return l.data && l.data.data;
                     default:
                         return l.is && l.data;
                 }
@@ -189,10 +201,11 @@
         components: {
             GridLayout: VueGridLayout.GridLayout,
             GridItem: VueGridLayout.GridItem,
+            Table,
             Emotion
         },
         mounted() {
-            this.unwatch =  this.$watch(vm => vm.layout.length, function (n, o) {
+            this.unwatch = this.$watch(vm => vm.layout.length, function (n, o) {
                 // item added or updated
                 if (n >= o) {
                     window.dispatchEvent(new Event('resize'));
@@ -213,6 +226,8 @@
         justify-content: space-between;
 
         overflow: hidden;
+
+        position: relative;
     }
 
     .layout-grid-item-border {
@@ -255,11 +270,12 @@
         display: flex;
         display: -webkit-flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
 
         width: 100%;
 
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 
     .icon {
@@ -278,8 +294,22 @@
         display: none;
     }
 
-
     .vue-grid-item > .vue-resizable-handle {
         background-position: unset;
+    }
+
+    @keyframes slideInUp {
+        from {
+            transform: translate3d(0, 100%, 0);
+            visibility: visible;
+        }
+
+        to {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .slide-enter-active {
+        animation: slideInUp .3s;
     }
 </style>
