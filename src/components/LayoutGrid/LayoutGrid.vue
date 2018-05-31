@@ -152,6 +152,7 @@
                 this.$emit('resize', i, h, w);
 
                 // dynamic component
+                // design for https://github.com/GopherJ/Vs
                 if (this.$refs[`LayoutGridItem${i}`][0].safeDraw) {
                     this.$refs[`LayoutGridItem${i}`][0].safeDraw();
                 }
@@ -160,6 +161,7 @@
                 this.$emit('resized', i, h, w, hpx, wpx);
 
                 // dynamic component
+                // design for https://github.com/GopherJ/Vs
                 if (this.$refs[`LayoutGridItem${i}`][0].safeDraw) {
                     this.$refs[`LayoutGridItem${i}`][0].safeDraw();
                 }
