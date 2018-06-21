@@ -191,6 +191,8 @@
                     case 'd3-timelion':
                     case 'd3-multi-line':
                     case 'd3-table':
+                    case 'd3-area':
+                    case 'd3-tracker':
                         return l.data && l.data.data && l.data.data.length > 0;
                     case 'd3-sankey-circular':
                         return l.data && l.data.nodes && l.data.links && l.data.nodes.length > 0 && l.data.links.length > 0;
