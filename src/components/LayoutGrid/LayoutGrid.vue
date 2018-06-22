@@ -33,9 +33,9 @@
 
                             <div class="level-left">
                                 <div class="level-item">
-                                    <span class="layout-grid-item-header-title">
+                                    <div class="layout-grid-item-header-title">
                                         {{ l.title || null }}
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
 
