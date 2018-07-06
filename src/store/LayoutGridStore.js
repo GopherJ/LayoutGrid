@@ -29,21 +29,32 @@ const mutations = {
 
         layout.splice(index, 1, layoutItem);
     },
-    DELETE_LAYOUT_ITEM({layout}, index) {
+    DELETE_LAYOUT_ITEM({layout, layoutCache}, index) {
+        const i = layout[index].i;
+        const _index = layoutCache.findIndex(x => x.i === i);
+        if (_index !== -1) {
+            layoutCache.splice(_index, 1);
+        }
+
         layout.splice(index, 1);
     },
     EXPAND_LAYOUT_ITEM({layout, layoutCache}, index) {
+        if (layout[index].w === 12) return;
+
         let layoutItem = cloneLayoutItem(layout, index);
+        layoutCache.push(layout[index]);
 
         layoutItem.x = 0;
-        layoutItem.y = 0;
         layoutItem.w = 12;
 
-        cloneLayout(layout, layoutCache);
-        layout.push(layoutItem);
+        layout.splice(index, 1, layoutItem);
     },
-    COLLAPSE_LAYOUT_ITEM({layout, layoutCache}) {
-        cloneLayout(layoutCache, layout);
+    COLLAPSE_LAYOUT_ITEM({layout, layoutCache}, i) {
+        const index = findLayoutItemIndex(layoutCache, i);
+        const _index = findLayoutItemIndex(layout, i);
+
+        layout.splice(_index, 1, layoutCache[index]);
+        layoutCache.splice(index, 1);
     },
     SET_LAYOUT(state, layout) {
         state.layout = _.cloneDeep(layout);
@@ -69,8 +80,8 @@ const mutations = {
 };
 
 const getters = {
-    HAS_LAYOUT(state) {
-        return state.layout.length > 0;
+    HAS_LAYOUT({layout}) {
+        return layout.length > 0;
     },
     GET_LAYOUT(state) {
         return state.layout;

@@ -41,18 +41,15 @@
 
                             <div class="level-right" v-if="editable">
                                 <div class="level-item">
-                                    <span v-show="!hasLayoutItemExpanded"
+                                    <span v-if="!isExpanded(l.i)"
                                           class="icon">
                                         <i class="mdi mdi-arrow-expand mdi-18px"
-                                           @click.stop="EXPAND_LAYOUT_ITEM(idx);
-                                          hasLayoutItemExpanded = true;"></i>
+                                           @click.stop="EXPAND_LAYOUT_ITEM(idx)"></i>
                                     </span>
 
-                                    <span v-show="hasLayoutItemExpanded"
-                                          class="icon">
+                                    <span v-else class="icon">
                                         <i class="mdi mdi-arrow-collapse mdi-18px"
-                                           @click.stop="COLLAPSE_LAYOUT_ITEM();
-                                          hasLayoutItemExpanded = false;"></i>
+                                           @click.stop="COLLAPSE_LAYOUT_ITEM(l.i)"></i>
                                     </span>
                                 </div>
 
@@ -63,8 +60,7 @@
                                 </div>
 
                                 <div class="level-item">
-                                    <span class="icon"
-                                          v-show="!hasLayoutItemExpanded">
+                                    <span class="icon">
                                         <i class="mdi mdi-close-outline mdi-18px"
                                            @click.stop="DELETE_LAYOUT_ITEM(idx);"></i>
                                     </span>
@@ -144,7 +140,6 @@
         name: 'layout-grid',
         data() {
             return {
-                hasLayoutItemExpanded: false,
                 isTableOpen: false
             };
         },
@@ -172,6 +167,9 @@
                 'DELETE_LAYOUT_ITEM',
                 'COLLAPSE_LAYOUT_ITEM',
             ]),
+            isExpanded(i) {
+               return this.layoutCache.findIndex(x => x.i === i) !== -1 ;
+            },
             isIndoorMapComponent(vm) {
                 const INDOOR_MAP_COMPONENTS = [
                     'd3-l-choropleth',
@@ -262,7 +260,8 @@
         },
         computed: {
             ...mapState('LayoutGrid', [
-                'layout'
+                'layout',
+                'layoutCache'
             ])
         },
         components: {
