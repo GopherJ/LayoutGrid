@@ -90,6 +90,7 @@
                     <span class="icon" style="position: absolute; left: 0; bottom: 0;"
                           v-if="Array.isArray(l.data.data)"
                           @click="toggle">
+
                           <i class="mdi mdi-18px"
                              :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
                                'mdi-arrow-up-drop-circle-outline': !isTableOpen
@@ -108,6 +109,36 @@
     import {mapMutations, mapState} from 'vuex';
     import Emotion from './Emotion';
     import Table from './Table';
+
+    const isObject            = o   => String(o) === '[object Object]';
+    const isString            = s   => typeof s === 'string';
+    const isArray             = arr => Array.isArray(arr);
+    const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
+    const isEmpty             = s   => s === '' || s === undefined || s === null;
+
+    const toggleVisibility    = el => {
+        const isShow  = el.style.display,
+              DISPLAY = 'block',
+              NONE    = 'none';
+
+        el.style.display = isShow === DISPLAY
+            ? NONE
+            : DISPLAY;
+    };
+
+    const toggleVisibilityBy   = (el, ele) => {
+        const isShow  = ele.style.display,
+            DISPLAY = 'block',
+            NONE    = 'none';
+
+        el.style.display = isShow === DISPLAY
+            ? NONE
+            : DISPLAY;
+    };
+
+    const isGeoJsonFeatureCollectionAndHasFeatures  =  (data) => {
+        return isObject(data) && (data['type'] === 'FeatureCollection') && isArrayAndHasLength(data['Features']) ;
+    };
 
     export default {
         name: 'layout-grid',
@@ -141,29 +172,52 @@
                 'DELETE_LAYOUT_ITEM',
                 'COLLAPSE_LAYOUT_ITEM',
             ]),
-            toggle(ev) {
-                const element = ev.target.parentNode.parentNode.querySelector('.layout-grid-item-content').childNodes[0],
-                    table = element.nextSibling.nextSibling;
+            isIndoorMapComponent(vm) {
+                const INDOOR_MAP_COMPONENTS = [
+                    'd3-l-choropleth',
+                    'd3-l-heat'
+                ];
 
-                    element.style.display = element.style.display === 'none' ? 'block' : 'none';
-                    table.style.display = element.style.display === 'block' ? 'none' : 'block';
+                return INDOOR_MAP_COMPONENTS.includes(vm.$options.name);
+            },
+            getComponentById(i) {
+                const ref = `LayoutGridItem${i}`;
+                const [component] = this.$refs[ref];
+
+                return component;
+            },
+            getLayoutGridItem(ev) {
+                return ev.target
+                    .parentNode
+                    .parentNode
+                    .querySelector('.layout-grid-item-content')
+                    .childNodes[0];
+            },
+            toggle(ev) {
+                const el = this.getLayoutGridItem(ev),
+                    table = el.nextSibling.nextSibling;
+
+                toggleVisibility(el);
+                toggleVisibilityBy(table, el);
             },
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
+                const component = this.getComponentById(i);
 
                 // dynamic component
                 // design for https://github.com/GopherJ/Vs
-                if (this.$refs[`LayoutGridItem${i}`][0].safeDraw) {
-                    this.$refs[`LayoutGridItem${i}`][0].safeDraw();
+                if (component.safeDraw && !this.isIndoorMapComponent(component)) {
+                    component.safeDraw();
                 }
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
+                const component = this.getComponentById(i);
 
                 // dynamic component
                 // design for https://github.com/GopherJ/Vs
-                if (this.$refs[`LayoutGridItem${i}`][0].safeDraw) {
-                    this.$refs[`LayoutGridItem${i}`][0].safeDraw();
+                if (component.safeDraw && !this.isIndoorMapComponent(component)) {
+                    component.safeDraw();
                 }
             },
             onLayoutUpdated(n) {
@@ -181,6 +235,8 @@
                 }
             },
             canRender(l) {
+                if (!isObject(l.data) || isEmpty(l.is)) return false;
+
                 // design for https://github.com/GopherJ/Vs
                 switch (l.is) {
                     case 'd3-pie':
@@ -190,17 +246,17 @@
                     case 'd3-timeline':
                     case 'd3-timelion':
                     case 'd3-multi-line':
-                    case 'd3-table':
                     case 'd3-area':
-                    case 'd3-tracker':
-                        return l.data && l.data.data && l.data.data.length > 0;
+                        return isArrayAndHasLength(l.data.data);
                     case 'd3-sankey-circular':
-                        return l.data && l.data.nodes && l.data.links && l.data.nodes.length > 0 && l.data.links.length > 0;
+                        return isArrayAndHasLength(l.data.nodes) && isArrayAndHasLength(l.data.links);
+                    case 'd3-l-heat':
+                        return isArrayAndHasLength(l.data.data);
+                    case 'd3-l-choropleth':
+                        return isGeoJsonFeatureCollectionAndHasFeatures(l.data.data);
                     case 'd3-metric':
                     case 'd3-circle':
-                        return l.data && l.data.data;
-                    default:
-                        return l.is && l.data;
+                        return !isEmpty(l.data.data);
                 }
             },
         },
