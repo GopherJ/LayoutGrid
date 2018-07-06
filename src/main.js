@@ -11,8 +11,10 @@ const install = (Vue, options = {}) => {
 };
 
 export default {
-    install,
+    install
+};
 
+export {
     LayoutGrid,
     LayoutGridStore
 };
