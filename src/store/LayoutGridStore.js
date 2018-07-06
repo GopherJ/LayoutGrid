@@ -41,8 +41,8 @@ const mutations = {
     EXPAND_LAYOUT_ITEM({layout, layoutCache}, index) {
         if (layout[index].w === 12) return;
 
-        let layoutItem = cloneLayoutItem(layout, index);
         layoutCache.push(layout[index]);
+        let layoutItem = cloneLayoutItem(layout, index);
 
         layoutItem.x = 0;
         layoutItem.w = 12;
@@ -55,6 +55,12 @@ const mutations = {
 
         layout.splice(_index, 1, layoutCache[index]);
         layoutCache.splice(index, 1);
+    },
+    DELETE_LAYOUT_ITEM_IN_CACHE({layout, layoutCache}, i) {
+        const index = findLayoutItemIndex(layoutCache, i);
+        if (index !== -1) {
+            layoutCache.splice(index, 1);
+        }
     },
     SET_LAYOUT(state, layout) {
         state.layout = _.cloneDeep(layout);

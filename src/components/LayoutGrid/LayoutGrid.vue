@@ -18,8 +18,8 @@
                 :i="l.i"
                 :min-w="minW"
                 @resize="(i, h, w) => onResize(i, h, w)"
-                @move="(i, x, y) => $emit('move', i, x, y)"
-                @moved="(i, x, y) => $emit('moved', i, x, y)"
+                @move="(i, x, y) => onMove(i, x, y)"
+                @moved="(i, x, y) => onMoved(i, x, y)"
                 @resized="(i, h, w, hpx, wpx) => onResized(i, h, w, hpx, wpx)"
                 drag-allow-from=".layout-grid-item-header-title"
                 drag-ignore-from=".layout-grid-item-content"
@@ -166,6 +166,7 @@
                 'EXPAND_LAYOUT_ITEM',
                 'DELETE_LAYOUT_ITEM',
                 'COLLAPSE_LAYOUT_ITEM',
+                'DELETE_LAYOUT_ITEM_IN_CACHE'
             ]),
             isExpanded(i) {
                return this.layoutCache.findIndex(x => x.i === i) !== -1 ;
@@ -207,6 +208,16 @@
                 if (component.safeDraw && !this.isIndoorMapComponent(component)) {
                     component.safeDraw();
                 }
+            },
+            onMove(i, x, y) {
+                this.$emit('move', i, x, y);
+
+                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
+            },
+            onMoved(i, x, y) {
+                this.$emit('moved', i, x, y);
+
+                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
