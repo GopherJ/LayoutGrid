@@ -199,16 +199,6 @@
                 toggleVisibility(el);
                 toggleVisibilityBy(table, el);
             },
-            onResize(i, h, w) {
-                this.$emit('resize', i, h, w);
-                const component = this.getComponentById(i);
-
-                // dynamic component
-                // design for https://github.com/GopherJ/Vs
-                if (component.safeDraw && !this.isIndoorMapComponent(component)) {
-                    component.safeDraw();
-                }
-            },
             onMove(i, x, y) {
                 this.$emit('move', i, x, y);
 
@@ -219,13 +209,23 @@
 
                 this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
             },
+            onResize(i, h, w) {
+                this.$emit('resize', i, h, w);
+                const component = this.getComponentById(i);
+
+                // dynamic component
+                // design for https://github.com/GopherJ/Vs
+                if (component.safeDraw) {
+                    component.safeDraw();
+                }
+            },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
                 const component = this.getComponentById(i);
 
                 // dynamic component
                 // design for https://github.com/GopherJ/Vs
-                if (component.safeDraw && !this.isIndoorMapComponent(component)) {
+                if (component.safeDraw) {
                     component.safeDraw();
                 }
             },
