@@ -211,6 +211,7 @@
             },
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
+                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
                 const component = this.getComponentById(i);
 
                 // dynamic component
@@ -221,6 +222,7 @@
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
+                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
                 const component = this.getComponentById(i);
 
                 // dynamic component
