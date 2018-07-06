@@ -133,7 +133,7 @@
     };
 
     const isGeoJsonFeatureCollectionAndHasFeatures  =  (data) => {
-        return isObject(data) && (data['type'] === 'FeatureCollection') && isArrayAndHasLength(data['Features']) ;
+        return isObject(data) && (data['type'] === 'FeatureCollection') && isArrayAndHasLength(data['features']) ;
     };
 
     export default {
