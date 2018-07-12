@@ -216,7 +216,7 @@
 
                 // dynamic component
                 // design for https://github.com/GopherJ/Vs
-                if (component.safeDraw) {
+                if (component.safeDraw && !this.isIndoorMapComponent(component)) {
                     component.safeDraw();
                 }
             },
