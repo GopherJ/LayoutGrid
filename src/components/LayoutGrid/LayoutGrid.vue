@@ -54,7 +54,7 @@
 
                                 <div class="level-item">
                                     <span class="icon">
-                                        <i class="mdi mdi-pencil mdi-18px" @click="onEdit(l.i)"></i>
+                                        <i class="mdi mdi-pencil mdi-18px" @click.stop="onEdit(l.i)"></i>
                                     </span>
                                 </div>
 
@@ -70,30 +70,20 @@
 
                     <div class="layout-grid-item-content" :style="{ height : `${l.h * rowHeight - 30}px` }">
                         <component
-                            v-show="!isTableOpen"
+                            v-show="true"
                             :ref="`LayoutGridItem${l.i}`"
                             :is="canRender(l) ? l.is : 'emotion'"
                             v-bind="canRender(l) ? l.data : null">
                         </component>
 
-                        <Table v-show="isTableOpen" :data="l.data.data" v-if="Array.isArray(l.data.data)"></Table>
+                        <Table v-show="false" :data="l.data.data" v-if="Array.isArray(l.data.data)"></Table>
                     </div>
 
                     <span class="icon" style="position: absolute; left: 0; bottom: 0;"
-                          v-if="Array.isArray(l.data.data)"
-                          @click="(ev) => toggle(ev, l.i)">
-
-                          <i class="mdi mdi-18px"
-                             :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
-                                   'mdi-arrow-up-drop-circle-outline': !isTableOpen
-                             }">
+                          v-if="Array.isArray(l.data.data)">
+                          <i class="mdi mdi-arrow-up-drop-circle-outline mdi-18px"
+                              @click.stop="(ev) => toggle(ev, l.i)">
                           </i>
-                    </span>
-
-                    <span class="icon" style="position: absolute; left: 18px; bottom: 0;"
-                          @click="(ev) => download(ev, l.title)">
-
-                          <i class="mdi mdi-download mdi-18px"></i>
                     </span>
                 </div>
             </grid-item>
@@ -145,14 +135,25 @@
         return isObject(data) && (data['type'] === 'FeatureCollection') && isArrayAndHasLength(data['features']) ;
     };
 
+    const rotateIcon = ev => {
+        const icon = ev.target,
+            arrowUp = 'mdi-arrow-up-drop-circle-outline',
+            arrowDown = 'mdi-arrow-down-drop-circle-outline';
+
+        if (icon.classList.contains(arrowUp)) {
+           icon.classList.remove(arrowUp);
+           icon.classList.add(arrowDown);
+        }
+
+        else {
+            icon.classList.remove(arrowDown);
+            icon.classList.add(arrowUp);
+        }
+    };
+
 
     export default {
         name: 'layout-grid',
-        data() {
-            return {
-                isTableOpen: false
-            };
-        },
         props: {
             editable: {
                 type: Boolean,
@@ -209,6 +210,8 @@
 
                 toggleVisibility(el);
                 toggleVisibilityBy(table, el);
+
+                rotateIcon(ev);
 
                 if (isFunction(component.safeDraw) && isDisplay(el)) component.safeDraw();
             },

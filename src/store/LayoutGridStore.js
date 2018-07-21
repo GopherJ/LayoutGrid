@@ -114,26 +114,18 @@ const getters = {
                 case 'd3-multi-line':
                 case 'd3-area':
                     layoutItem.data.data = [];
-
-                    LayoutConfig.push(layoutItem);
                     break;
                 case 'd3-sankey-circular':
                     layoutItem.data.nodes = [];
                     layoutItem.data.links = [];
-
-                    LayoutConfig.push(layoutItem);
                     break;
                 case 'd3-metric':
                 case 'd3-circle':
                     layoutItem.data.data = null;
-
-                    LayoutConfig.push(layoutItem);
                     break;
                 case 'd3-l-heat':
                     layoutItem.data.data = [];
                     layoutItem.data.indoorMaps = [];
-
-                    LayoutConfig.push(layoutItem);
                     break;
                 case 'd3-l-choropleth':
                     layoutItem.data.data = {
@@ -141,15 +133,14 @@ const getters = {
                         features: []
                     };
                     layoutItem.data.indoorMaps = [];
-
-                    LayoutConfig.push(layoutItem);
                     break;
                 default:
                     layoutItem.data = null;
-
-                    LayoutConfig.push(layoutItem);
                     break;
             }
+
+            delete layoutItem.moved;
+            LayoutConfig.push(layoutItem);
         }
 
         return LayoutConfig;
