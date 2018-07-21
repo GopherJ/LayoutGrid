@@ -340,8 +340,8 @@
 
         width: 100%;
 
-        overflow-x: hidden;
-        overflow-y: hidden;
+        overflow-x: auto;
+        overflow-y: auto;
     }
 
     .icon {

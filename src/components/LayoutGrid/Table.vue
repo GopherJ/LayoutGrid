@@ -10,7 +10,7 @@
         :per-page="perPage">
 
         <template slot-scope="props">
-            <b-table-column v-for="(value, key) in props.row" :field="key" :label="key" :key="key" centered>
+            <b-table-column v-for="(value, key) in props.row" :field="key" :label="key" :key="key" centered sortable>
                 {{ value }}
             </b-table-column>
         </template>
@@ -22,18 +22,14 @@
                 <span class="icon">
                     <i class="mdi mdi-download mdi-18px"></i>
                 </span>
-                <span>
-                    json
-                </span>
+                <span>json</span>
             </a>
 
             <a :href="csv" download="data.csv">
                 <span class="icon">
                     <i class="mdi mdi-download mdi-18px"></i>
                 </span>
-                <span>
-                    csv
-                </span>
+                <span>csv</span>
             </a>
         </div>
     </b-table>
