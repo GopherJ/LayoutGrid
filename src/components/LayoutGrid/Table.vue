@@ -18,18 +18,18 @@
         <div slot="bottom-left">
             <strong>Export:  </strong>
 
-            <a :href="json" download="data.json">
+            <a class="link" :href="json" download="data.json">
                 <span class="icon">
                     <i class="mdi mdi-download mdi-18px"></i>
                 </span>
-                <span>json</span>
+                <span>Json</span>
             </a>
 
-            <a :href="csv" download="data.csv">
+            <a class="link" :href="csv" download="data.csv">
                 <span class="icon">
                     <i class="mdi mdi-download mdi-18px"></i>
                 </span>
-                <span>csv</span>
+                <span>Csv</span>
             </a>
         </div>
     </b-table>

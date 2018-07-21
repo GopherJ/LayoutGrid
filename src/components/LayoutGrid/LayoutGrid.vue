@@ -89,6 +89,12 @@
                              }">
                           </i>
                     </span>
+
+                    <span class="icon" style="position: absolute; left: 18px; bottom: 0;"
+                          @click="(ev) => download(ev, l.title)">
+
+                          <i class="mdi mdi-download mdi-18px"></i>
+                    </span>
                 </div>
             </grid-item>
         </grid-layout>
@@ -101,10 +107,10 @@
     import {mapMutations, mapState} from 'vuex';
     import Emotion from './Emotion';
     import Table from './Table';
+    import { getSVGString, svgString2Image } from '../../utils/svg2png';
+    import { saveAs } from 'file-saver/FileSaver';
 
     const isObject            = o   => String(o) === '[object Object]';
-    const isString            = s   => typeof s === 'string';
-    const isArray             = arr => Array.isArray(arr);
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
     const isEmpty             = s   => s === '' || s === undefined || s === null;
     const isFunction          = f   => typeof f === 'function';
@@ -205,6 +211,17 @@
                 toggleVisibilityBy(table, el);
 
                 if (isFunction(component.safeDraw) && isDisplay(el)) component.safeDraw();
+            },
+            download(ev, title) {
+                const svg = this.getLayoutGridItem(ev).querySelector('svg'),
+                    { width, height } = svg.getBBox();
+
+                const svgString = getSVGString(svg);
+                svgString2Image( svgString, 2 * width, 2 * height, 'png', save);
+
+                function save( dataBlob, filesize ){
+                    saveAs( dataBlob, title);
+                }
             },
             onMove(i, x, y) {
                 this.$emit('move', i, x, y);
@@ -340,8 +357,8 @@
 
         width: 100%;
 
-        overflow-x: auto;
-        overflow-y: auto;
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 
     .icon {
