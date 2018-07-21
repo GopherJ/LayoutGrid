@@ -115,24 +115,22 @@
         }
     };
 
-    const isDisplayBlock      = el => el.style.display === 'block';
+    const isDisplay           = el => el.style.display === '' || el.style.display === 'block';
 
     const toggleVisibility    = el => {
-        const isShow  = el.style.display,
-              DISPLAY = 'block',
+        const DISPLAY = 'block',
               NONE    = 'none';
 
-        el.style.display = isShow === DISPLAY
+        el.style.display = isDisplay(el)
             ? NONE
             : DISPLAY;
     };
 
     const toggleVisibilityBy   = (el, ele) => {
-        const isShow  = ele.style.display,
-            DISPLAY = 'block',
-            NONE    = 'none';
+        const DISPLAY = 'block',
+              NONE    = 'none';
 
-        el.style.display = isShow === DISPLAY
+        el.style.display = isDisplay(ele)
             ? NONE
             : DISPLAY;
     };
@@ -206,7 +204,7 @@
                 toggleVisibility(el);
                 toggleVisibilityBy(table, el);
 
-                if (isFunction(component.safeDraw) && isDisplayBlock(el)) component.safeDraw();
+                if (isFunction(component.safeDraw) && isDisplay(el)) component.safeDraw();
             },
             onMove(i, x, y) {
                 this.$emit('move', i, x, y);
