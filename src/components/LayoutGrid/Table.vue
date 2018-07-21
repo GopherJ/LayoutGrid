@@ -84,7 +84,7 @@
                         return ite;
                     }, keys.join(','));
 
-                    return `data:text/csv;charset=utf-8,${data}`;
+                    return `data:text/csv;charset=utf-8,${encodeURIComponent(data)}`;
                 }
             },
             json() {
