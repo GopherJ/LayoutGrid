@@ -27,7 +27,6 @@
                 :key="l.i">
 
                 <div class="layout-grid-item" :class="{ 'layout-grid-item-border': editable }">
-
                     <div class="layout-grid-item-header">
                         <div class="level is-mobile">
 
@@ -82,7 +81,7 @@
 
                     <span class="icon" style="position: absolute; left: 0; bottom: 0;"
                           v-if="Array.isArray(l.data.data)"
-                          @click="toggle">
+                          @click="(ev) => toggle(ev, l.i)">
 
                           <i class="mdi mdi-18px"
                              :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
@@ -115,6 +114,8 @@
             vm.$root.$emit(event, payload)
         }
     };
+
+    const isDisplayBlock      = el => el.style.display === 'block';
 
     const toggleVisibility    = el => {
         const isShow  = el.style.display,
@@ -197,17 +198,18 @@
                     .querySelector('.layout-grid-item-content')
                     .childNodes[0];
             },
-            toggle(ev) {
+            toggle(ev, i) {
                 const el = this.getLayoutGridItem(ev),
-                    table = el.nextSibling.nextSibling;
+                    table = el.nextSibling.nextSibling,
+                    component = this.getComponentById(i);
 
                 toggleVisibility(el);
                 toggleVisibilityBy(table, el);
+
+                if (isFunction(component.safeDraw) && isDisplayBlock(el)) component.safeDraw();
             },
             onMove(i, x, y) {
                 this.$emit('move', i, x, y);
-
-                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
             },
             onMoved(i, x, y) {
                 this.$emit('moved', i, x, y);
@@ -216,8 +218,6 @@
             },
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
-
-                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
@@ -277,7 +277,6 @@
         },
         mounted() {
             this.unwatch = this.$watch(vm => vm.layout.length, function (n, o) {
-                // item added or updated
                 if (n >= o) {
                     window.dispatchEvent(new Event('resize'));
                 }
@@ -333,7 +332,7 @@
     .layout-grid-item-content {
         align-self: center;
 
-        padding: 0px 25px 25px 25px;
+        padding: 0px 18px 18px 18px;
 
         /*for emotion*/
         display: flex;
