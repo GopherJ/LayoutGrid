@@ -70,15 +70,12 @@
                     </div>
 
                     <div class="layout-grid-item-content" :style="{ height : `${l.h * rowHeight - 30}px` }">
-
-                        <transition name="slide">
-                            <component
-                                v-show="!isTableOpen"
-                                :ref="`LayoutGridItem${l.i}`"
-                                :is="canRender(l) ? l.is : 'emotion'"
-                                v-bind="canRender(l) ? l.data : null">
-                            </component>
-                        </transition>
+                        <component
+                            v-show="!isTableOpen"
+                            :ref="`LayoutGridItem${l.i}`"
+                            :is="canRender(l) ? l.is : 'emotion'"
+                            v-bind="canRender(l) ? l.data : null">
+                        </component>
 
                         <Table v-show="isTableOpen" :data="l.data.data" v-if="Array.isArray(l.data.data)"></Table>
                     </div>
@@ -89,7 +86,7 @@
 
                           <i class="mdi mdi-18px"
                              :class="{ 'mdi-arrow-down-drop-circle-outline': isTableOpen,
-                               'mdi-arrow-up-drop-circle-outline': !isTableOpen
+                                   'mdi-arrow-up-drop-circle-outline': !isTableOpen
                              }">
                           </i>
                     </span>
@@ -111,6 +108,13 @@
     const isArray             = arr => Array.isArray(arr);
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
     const isEmpty             = s   => s === '' || s === undefined || s === null;
+    const isFunction          = f   => typeof f === 'function';
+
+    const rootEmitter         = (vm, event, payload)  => {
+        if (vm.$root !== vm) {
+            vm.$root.$emit(event, payload)
+        }
+    };
 
     const toggleVisibility    = el => {
         const isShow  = el.style.display,
@@ -135,6 +139,7 @@
     const isGeoJsonFeatureCollectionAndHasFeatures  =  (data) => {
         return isObject(data) && (data['type'] === 'FeatureCollection') && isArrayAndHasLength(data['features']) ;
     };
+
 
     export default {
         name: 'layout-grid',
@@ -211,25 +216,16 @@
             },
             onResize(i, h, w) {
                 this.$emit('resize', i, h, w);
-                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
-                const component = this.getComponentById(i);
 
-                // dynamic component
-                // design for https://github.com/GopherJ/Vs
-                if (component.safeDraw && !this.isIndoorMapComponent(component)) {
-                    component.safeDraw();
-                }
+                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
             },
             onResized(i, h, w, hpx, wpx) {
                 this.$emit('resized', i, h, w, hpx, wpx);
-                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
-                const component = this.getComponentById(i);
 
-                // dynamic component
-                // design for https://github.com/GopherJ/Vs
-                if (component.safeDraw) {
-                    component.safeDraw();
-                }
+                this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
+
+                const component = this.getComponentById(i);
+                if (isFunction(component.safeDraw)) component.safeDraw();
             },
             onLayoutUpdated(n) {
                 this.$emit('updated', n);
@@ -237,18 +233,14 @@
             onEdit(i) {
                 this.$emit('edit', i);
 
-                // design for https://github.com/GopherJ/Vs
-                if (this.$root !== this) {
-                    this.$root.$emit('layout-item-edit', {
-                        i,
-                        payload: null
-                    });
-                }
+                const event = 'layout-item-edit',
+                    payload = { i, payload: null };
+
+                rootEmitter(this, event, payload);
             },
             canRender(l) {
                 if (!isObject(l.data) || isEmpty(l.is)) return false;
 
-                // design for https://github.com/GopherJ/Vs
                 switch (l.is) {
                     case 'd3-pie':
                     case 'd3-horizontal-bar':
@@ -341,9 +333,7 @@
     .layout-grid-item-content {
         align-self: center;
 
-        padding-top: 0;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding: 0px 25px 25px 25px;
 
         /*for emotion*/
         display: flex;
@@ -375,20 +365,5 @@
 
     .vue-grid-item > .vue-resizable-handle {
         background-position: unset;
-    }
-
-    @keyframes slideInUp {
-        from {
-            transform: translate3d(0, 100%, 0);
-            visibility: visible;
-        }
-
-        to {
-            transform: translate3d(0, 0, 0);
-        }
-    }
-
-    .slide-enter-active {
-        animation: slideInUp .3s;
     }
 </style>
