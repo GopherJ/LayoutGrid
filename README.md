@@ -68,7 +68,7 @@ new Vue({
 ## Props
 
 |prop|description|type|default|
-|:---|:---|:---|
+|:---|:---|:---|:---|
 |`editable`|`show border or not`|`boolean`|`true`|
 |`margin`|`margin between layout grid item`|`[number, number]`|`[0, 0]`|
 |`row-height`|`layout grid item height unit`|`number`|`100`|
