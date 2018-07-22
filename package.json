@@ -1,6 +1,6 @@
 {
   "name": "vue-layout-grid",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "layout gridster with vue",
   "main": "dist/LayoutGrid.min.js",
   "scripts": {
