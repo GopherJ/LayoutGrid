@@ -94,11 +94,9 @@
 <script>
     /* eslint-disable */
     import VueGridLayout from 'vue-grid-layout';
-    import {mapMutations, mapState} from 'vuex';
+    import { mapMutations, mapState } from 'vuex';
     import Emotion from './Emotion';
     import Table from './Table';
-    import { getSVGString, svgString2Image } from '../../utils/svg2png';
-    import { saveAs } from 'file-saver/FileSaver';
 
     const isObject            = o   => String(o) === '[object Object]';
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
@@ -214,17 +212,6 @@
                 rotateIcon(ev);
 
                 if (isFunction(component.safeDraw) && isDisplay(el)) component.safeDraw();
-            },
-            download(ev, title) {
-                const svg = this.getLayoutGridItem(ev).querySelector('svg'),
-                    { width, height } = svg.getBBox();
-
-                const svgString = getSVGString(svg);
-                svgString2Image( svgString, 2 * width, 2 * height, 'png', save);
-
-                function save( dataBlob, filesize ){
-                    saveAs( dataBlob, title);
-                }
             },
             onMove(i, x, y) {
                 this.$emit('move', i, x, y);

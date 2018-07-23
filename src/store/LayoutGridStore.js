@@ -1,12 +1,9 @@
 /* eslint-disable */
 import {
     cloneLayoutItem,
-    cloneLayout,
     calculateXYI,
     findLayoutItemIndex,
 } from '../utils';
-
-import _ from 'lodash';
 
 const namespaced = true;
 

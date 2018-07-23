@@ -8,16 +8,16 @@ Layout grid system in VueJs, see also:
 
 ## Introduction
 
-This component for creating a dashboard more simply. All config of the dashboard will be saved in the vuex module `LayoutGrid`. In any component of
+This component is for creating a dashboard more simply. All config of the dashboard will be saved in the vuex module `LayoutGrid`. In any component of
 your SPA, you can add a new item or delete one. I've also added some new features:
 
 - `table mode`
 - `json/csv download`
-- `UI`
+- `UI design`
 
-This component use `jbaysolutions/vue-grid-layout` internally and makes it more simple to use, that means the layout is controled in vuex and
-every time we need to add a new item. We just to specify the `title`, `is`, `w`, `h` and `data`. It will calculate automatically the next position
-and the `i` indentifier.
+This component use `jbaysolutions/vue-grid-layout` internally and makes it simpler to use, that means the layout is controlled in vuex and every time
+when we need to add a new item. We just need to specify the `title`, `is`, `w`, `h` and `data`. It will calculate automatically the next position and
+also the identifier `i` .
 
 
 ## Installation
