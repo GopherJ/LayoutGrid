@@ -142,3 +142,17 @@ this.$store.commit('LayoutGrid/EDIT_LAYOUT_ITEM', {
 
 *###Dashboard*
 ![Dashboard](./Dashboard.PNG)
+
+
+
+## Contribute
+
+1. create your own branch on gitlab
+2. `git clone ssh://git@git.ubudu.com:10022/GopherJ/LayoutGrid.git`
+    1. `cd LayoutGrid`
+    2. `git checkout -b [branch name]`
+    3. `make changes`
+    4. `npm run build`
+    5. `git add . && git commit -m "[message]" && git push origin [branch name]`
+    6. `send PR`
+
