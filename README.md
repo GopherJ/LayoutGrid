@@ -136,9 +136,9 @@ this.$store.commit('LayoutGrid/EDIT_LAYOUT_ITEM', {
 ## Screen Shots
 
 *###UI*
-![Alerts](../images/Alerts.PNG)
-![Table](../images/Table.PNG)
+![Alerts](./images/Alerts.PNG)
+![Table](./images/Table.PNG)
 
 
 *###Dashboard*
-![Dashboard](../images/Dashboard.PNG)
+![Dashboard](./images/Dashboard.PNG)
