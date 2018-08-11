@@ -230,7 +230,7 @@
                 this.DELETE_LAYOUT_ITEM_IN_CACHE(i);
 
                 const component = this.getComponentById(i);
-                if (isFunction(component.safeDraw) && isDisplay(component.$el)) component.safeDraw();
+                if (isFunction(component.safeDraw) && isDisplay(component.$el)) this.$nextTick(() => component.safeDraw());
             },
             onLayoutUpdated(n) {
                 this.$emit('updated', n);
