@@ -254,6 +254,8 @@
                     case 'd3-timeline':
                     case 'd3-timelion':
                     case 'd3-multi-line':
+                    case 'd3-grouped-area':
+                    case 'd3-word-cloud':
                     case 'd3-area':
                         return isArrayAndHasLength(l.data.data);
                     case 'd3-sankey-circular':
@@ -279,16 +281,6 @@
             GridItem: VueGridLayout.GridItem,
             Table,
             Emotion
-        },
-        mounted() {
-            this.unwatch = this.$watch(vm => vm.layout.length, function (n, o) {
-                if (n >= o) {
-                    window.dispatchEvent(new Event('resize'));
-                }
-            });
-        },
-        beforeDestroy() {
-            this.unwatch();
         }
     }
 </script>
