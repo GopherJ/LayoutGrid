@@ -88,6 +88,9 @@ const mutations = {
 };
 
 const getters = {
+    /**
+     * @return {boolean}
+     */
     HAS_LAYOUT({layout}) {
         return layout.length > 0;
     },
