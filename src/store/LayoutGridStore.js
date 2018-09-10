@@ -66,24 +66,6 @@ const mutations = {
         for (let i = 0, l = layout.length; i < l; i += 1) {
             state.layout.push(layout[i]);
         }
-    },
-    SEARCH_LAYOUT_ITEM(state, searchString) {
-        const re = new RegExp(searchString, 'i');
-        const layout = state.layout;
-
-        for (let i = 0, l = layout.length; i < l; i += 1) {
-            const layoutItem = layout[i];
-
-            if (re.test(layoutItem.title) || re.test(layoutItem.is) || re.test(layoutItem.i)) {
-                Object.assign(layoutItem, {
-                    show: true
-                });
-            } else {
-                Object.assign(layoutItem, {
-                    show: false
-                });
-            }
-        }
     }
 };
 
@@ -112,6 +94,7 @@ const getters = {
                 case 'd3-timeline':
                 case 'd3-timelion':
                 case 'd3-multi-line':
+                case 'd3-grouped-area':
                 case 'd3-area':
                     layoutItem.data.data = [];
                     break;
