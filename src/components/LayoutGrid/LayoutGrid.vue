@@ -23,7 +23,6 @@
                 @resized="(i, h, w, hpx, wpx) => onResized(i, h, w, hpx, wpx)"
                 drag-allow-from=".layout-grid-item-header-title"
                 drag-ignore-from=".layout-grid-item-content"
-                v-if="l.show"
                 :key="l.i">
 
                 <div class="layout-grid-item" :class="{ 'layout-grid-item-border': editable }">
@@ -93,10 +92,11 @@
 
 <script>
     /* eslint-disable */
-    import VueGridLayout from 'vue-grid-layout';
     import { mapMutations, mapState } from 'vuex';
     import Emotion from './Emotion';
     import Table from './Table';
+    import GridItem from '../GridItem';
+    import GridLayout from '../GridLayout';
 
     const isObject            = o   => String(o) === '[object Object]';
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
@@ -277,8 +277,8 @@
             ])
         },
         components: {
-            GridLayout: VueGridLayout.GridLayout,
-            GridItem: VueGridLayout.GridItem,
+            GridLayout,
+            GridItem,
             Table,
             Emotion
         }
