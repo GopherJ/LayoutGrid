@@ -1,93 +1,94 @@
 <template>
-    <div class="layout-grid" ref="LayoutGrid">
+    <u-card :label="$t('rtAnalytics.dashboard.label')">
+        <div class="layout-grid" ref="LayoutGrid">
+            <grid-layout
+                :layout="layout"
+                :row-height="rowHeight"
+                :margin="margin"
+                :is-draggable="editable"
+                :is-resizable="editable"
+                @layout-updated="(n) => onLayoutUpdated(n)">
 
-        <grid-layout
-            :layout="layout"
-            :row-height="rowHeight"
-            :margin="margin"
-            :is-draggable="editable"
-            :is-resizable="editable"
-            @layout-updated="(n) => onLayoutUpdated(n)">
+                <grid-item
+                    v-for="(l, idx) of layout"
+                    :x="l.x"
+                    :y="l.y"
+                    :w="l.w"
+                    :h="l.h"
+                    :i="l.i"
+                    :min-w="minW"
+                    @resize="(i, h, w) => onResize(i, h, w)"
+                    @move="(i, x, y) => onMove(i, x, y)"
+                    @moved="(i, x, y) => onMoved(i, x, y)"
+                    @resized="(i, h, w, hpx, wpx) => onResized(i, h, w, hpx, wpx)"
+                    drag-allow-from=".layout-grid-item-header-title"
+                    drag-ignore-from=".layout-grid-item-content"
+                    :key="l.i">
 
-            <grid-item
-                v-for="(l, idx) of layout"
-                :x="l.x"
-                :y="l.y"
-                :w="l.w"
-                :h="l.h"
-                :i="l.i"
-                :min-w="minW"
-                @resize="(i, h, w) => onResize(i, h, w)"
-                @move="(i, x, y) => onMove(i, x, y)"
-                @moved="(i, x, y) => onMoved(i, x, y)"
-                @resized="(i, h, w, hpx, wpx) => onResized(i, h, w, hpx, wpx)"
-                drag-allow-from=".layout-grid-item-header-title"
-                drag-ignore-from=".layout-grid-item-content"
-                :key="l.i">
+                    <div class="layout-grid-item" :class="{ 'layout-grid-item-border': editable }">
+                        <div class="layout-grid-item-header">
+                            <div class="level is-mobile">
 
-                <div class="layout-grid-item" :class="{ 'layout-grid-item-border': editable }">
-                    <div class="layout-grid-item-header">
-                        <div class="level is-mobile">
-
-                            <div class="level-left">
-                                <div class="level-item">
-                                    <div class="layout-grid-item-header-title">
-                                        {{ l.title || null }}
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <div class="layout-grid-item-header-title">
+                                            {{ l.title || null }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="level-right" v-if="editable">
-                                <div class="level-item">
+                                <div class="level-right" v-if="editable">
+                                    <div class="level-item">
                                     <span v-if="!isExpanded(l.i)"
                                           class="icon">
                                         <i class="mdi mdi-arrow-expand mdi-18px"
                                            @click.stop="EXPAND_LAYOUT_ITEM(idx)"></i>
                                     </span>
 
-                                    <span v-else class="icon">
+                                        <span v-else class="icon">
                                         <i class="mdi mdi-arrow-collapse mdi-18px"
                                            @click.stop="COLLAPSE_LAYOUT_ITEM(l.i)"></i>
                                     </span>
-                                </div>
+                                    </div>
 
-                                <div class="level-item">
+                                    <div class="level-item">
                                     <span class="icon">
                                         <i class="mdi mdi-pencil mdi-18px" @click.stop="onEdit(l.i)"></i>
                                     </span>
-                                </div>
+                                    </div>
 
-                                <div class="level-item">
+                                    <div class="level-item">
                                     <span class="icon">
                                         <i class="mdi mdi-close-outline mdi-18px"
                                            @click.stop="DELETE_LAYOUT_ITEM(idx);"></i>
                                     </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="layout-grid-item-content" :style="{ height : `${l.h * rowHeight - 30}px` }">
-                        <component
-                            v-show="true"
-                            :ref="`LayoutGridItem${l.i}`"
-                            :is="canRender(l) ? l.is : 'emotion'"
-                            v-bind="canRender(l) ? l.data : null">
-                        </component>
+                        <div class="layout-grid-item-content" :style="{ height : `${l.h * rowHeight - 30}px` }">
+                            <component
+                                v-show="true"
+                                :ref="`LayoutGridItem${l.i}`"
+                                :is="canRender(l) ? l.is : 'emotion'"
+                                v-bind="canRender(l) ? l.data : null">
+                            </component>
 
-                        <Table v-show="false" :data="l.data.data" v-if="Array.isArray(l.data.data)"></Table>
-                    </div>
+                            <Table v-show="false" :data="l.data.data" v-if="Array.isArray(l.data.data)"></Table>
+                        </div>
 
-                    <span class="icon" style="position: absolute; left: 0; bottom: 0;"
-                          v-if="Array.isArray(l.data.data)">
+                        <span class="icon" style="position: absolute; left: 0; bottom: 0;"
+                              v-if="Array.isArray(l.data.data)">
                           <i class="mdi mdi-arrow-up-drop-circle-outline mdi-18px"
-                              @click.stop="(ev) => toggle(ev, l.i)">
+                             @click.stop="(ev) => toggle(ev, l.i)">
                           </i>
                     </span>
-                </div>
-            </grid-item>
-        </grid-layout>
-    </div>
+                    </div>
+                </grid-item>
+            </grid-layout>
+        </div>
+    </u-card>
 </template>
 
 <script>
@@ -97,6 +98,7 @@
     import Table from './Table';
     import GridItem from '../GridItem';
     import GridLayout from '../GridLayout';
+    import UCard from '../UCard';
 
     const isObject            = o   => String(o) === '[object Object]';
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
@@ -268,7 +270,7 @@
                     case 'd3-circle':
                         return !isEmpty(l.data.data);
                 }
-            },
+            }
         },
         computed: {
             ...mapState('LayoutGrid', [
@@ -277,6 +279,7 @@
             ])
         },
         components: {
+            UCard,
             GridLayout,
             GridItem,
             Table,
@@ -355,6 +358,10 @@
 </style>
 
 <style>
+    .layout-grid {
+        background-color: #FFFFFF;
+    }
+
     .vue-grid-item.vue-grid-placeholder {
         display: none;
     }

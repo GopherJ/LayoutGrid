@@ -95,6 +95,7 @@ const getters = {
                 case 'd3-timelion':
                 case 'd3-multi-line':
                 case 'd3-grouped-area':
+                case 'd3-word-cloud':
                 case 'd3-area':
                     layoutItem.data.data = [];
                     break;

@@ -187,7 +187,6 @@ export function getAllCollisions(layout, layoutItem) {
  * @return {Array}        Array of static layout items..
  */
 export function getStatics(layout) {
-    //return [];
     return layout.filter((l) => l.static);
 }
 
