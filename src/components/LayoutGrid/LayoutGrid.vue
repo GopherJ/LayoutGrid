@@ -2,6 +2,7 @@
     <u-card :label="$t('UAnalytics.dashboard.label')">
         <div class="layout-grid" ref="LayoutGrid">
             <grid-layout
+                v-if="layout.length > 0"
                 :layout="layout"
                 :row-height="rowHeight"
                 :margin="margin"
@@ -87,6 +88,8 @@
                     </div>
                 </grid-item>
             </grid-layout>
+
+            <div class="layout-grid-empty" v-else>{{ $t('UAnalytics.dashboard.noChart') }}</div>
         </div>
     </u-card>
 </template>
@@ -344,6 +347,14 @@
 
         overflow-x: hidden;
         overflow-y: hidden;
+    }
+
+    .layout-grid-empty {
+        width: 100%;
+        height: 40px;
+        border: 1px solid #dbdbdb;
+        line-height: 40px;
+        text-align: center;
     }
 
     .icon {
