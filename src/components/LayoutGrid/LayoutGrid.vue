@@ -32,7 +32,7 @@
 
                                 <div class="level-left">
                                     <div class="level-item">
-                                        <div class="layout-grid-item-header-title">
+                                        <div class="layout-grid-item-header-title" :style="paddingLeft">
                                             {{ l.title || null }}
                                         </div>
                                     </div>
@@ -80,11 +80,11 @@
                         </div>
 
                         <span class="icon" style="position: absolute; left: 0; bottom: 0;"
-                              v-if="Array.isArray(l.data.data)">
-                          <i class="mdi mdi-arrow-up-drop-circle-outline mdi-18px"
-                             @click.stop="(ev) => toggle(ev, l.i)">
-                          </i>
-                    </span>
+                              v-if="Array.isArray(l.data.data) && editable">
+                              <i class="mdi mdi-arrow-up-drop-circle-outline mdi-18px"
+                                 @click.stop="(ev) => toggle(ev, l.i)">
+                              </i>
+                        </span>
                     </div>
                 </grid-item>
             </grid-layout>
@@ -279,7 +279,12 @@
             ...mapState('LayoutGrid', [
                 'layout',
                 'layoutCache'
-            ])
+            ]),
+            paddingLeft() {
+                return {
+                    left: this.editable ? '2px' : '16px'
+                }
+            }
         },
         components: {
             UCard,
@@ -329,7 +334,6 @@
         word-wrap: break-word;
 
         position: relative;
-        left: 2px;
     }
 
     .layout-grid-item-content {
