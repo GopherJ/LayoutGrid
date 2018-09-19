@@ -1,5 +1,5 @@
 <template>
-    <u-card :label="$t('rtAnalytics.dashboard.label')">
+    <u-card :label="$t('UAnalytics.dashboard.label')">
         <div class="layout-grid" ref="LayoutGrid">
             <grid-layout
                 :layout="layout"
