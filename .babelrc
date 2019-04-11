@@ -6,7 +6,6 @@
     "stage-0"
   ],
   "plugins": [
-      "dynamic-import-webpack",
-      "transform-flow-comments"
+      "dynamic-import-webpack"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "vue-layout-grid",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "layout gridster with vue",
   "main": "dist/LayoutGrid.min.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "buefy"
   ],
   "dependencies": {
-    "buefy": "^0.6.3",
+    "buefy": "^0.7.4",
     "lodash": "^4.17.5",
     "vue": "^2.5.13",
     "vuex": "^3.0.1",

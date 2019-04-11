@@ -21,7 +21,7 @@ const cloneLayoutItem = (layout, idx) => {
  * @param layout
  */
 const clearLayout = (layout) => {
-    layout.length = 0;
+    layout = [];
 };
 
 

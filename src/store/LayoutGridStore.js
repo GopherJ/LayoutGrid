@@ -60,8 +60,8 @@ const mutations = {
         }
     },
     SET_LAYOUT(state, layout) {
-        state.layout.length = 0;
-        state.layoutCache.length = 0;
+        state.layout = [];
+        state.layoutCache = [];
 
         for (let i = 0, l = layout.length; i < l; i += 1) {
             state.layout.push(layout[i]);
