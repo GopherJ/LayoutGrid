@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {cloneDeep} from 'lodash';
 
 
 
@@ -10,7 +10,7 @@ import _ from 'lodash';
  * @returns {layout}
  */
 const cloneLayoutItem = (layout, idx) => {
-    return _.cloneDeep(layout[idx]);
+    return cloneDeep(layout[idx]);
 };
 
 
