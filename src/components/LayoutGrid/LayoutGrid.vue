@@ -105,7 +105,7 @@
 
     const isObject            = o   => String(o) === '[object Object]';
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
-    const isEmpty             = s   => s === '' || s === undefined || s === null;
+    const isEmpty             = s   => s === '' || s === undefined || s === null || s === 0;
     const isFunction          = f   => typeof f === 'function';
 
     const rootEmitter         = (vm, event, payload)  => {
