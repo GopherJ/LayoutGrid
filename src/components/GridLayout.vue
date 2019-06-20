@@ -1,13 +1,15 @@
 <template>
     <div ref="item" class="vue-grid-layout" :style="mergedStyle">
         <slot></slot>
-        <grid-item class="vue-grid-placeholder"
-                   v-show="isDragging"
-                   :x="placeholder.x"
-                   :y="placeholder.y"
-                   :w="placeholder.w"
-                   :h="placeholder.h"
-                   :i="placeholder.i"></grid-item>
+        <grid-item
+            class="vue-grid-placeholder"
+            v-show="isDragging"
+            :x="placeholder.x"
+            :y="placeholder.y"
+            :w="placeholder.w"
+            :h="placeholder.h"
+            :i="placeholder.i">
+        </grid-item>
     </div>
 </template>
 <style>

@@ -71,6 +71,3 @@ export function removeWindowEventListener(event, callback){
 
     window.removeEventListener(event, callback);
 }
-
-
-

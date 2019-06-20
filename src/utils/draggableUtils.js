@@ -45,4 +45,3 @@ export function createCoreData(lastX, lastY, x, y) {
 function isNum(num)  {
     return typeof num === 'number' && !isNaN(num);
 }
-

@@ -249,6 +249,11 @@
             this.eventBus.$off('setColNum', self.setColNum);
             this.interactObj.unset() // destroy interact intance
         },
+        activated: function() {
+            if (this.containerWidth <= 100) {
+                window.dispatchEvent(new Event('resize'));
+            }
+        },
         mounted: function () {
             this.cols = this.$parent.colNum;
             this.rowHeight = this.$parent.rowHeight;
@@ -330,7 +335,6 @@
                 this.createStyle();
             },
             renderRtl: function () {
-                // console.log("### renderRtl");
                 this.tryMakeResizable();
                 this.createStyle();
             }
@@ -353,38 +357,35 @@
                     this.innerX = 0;
                     this.innerW = (this.w > this.cols) ? this.cols : this.w
                 } else {
-                  this.innerX = this.x;
-                  this.innerW = this.w;
+                    this.innerX = this.x;
+                    this.innerW = this.w;
                 }
-                let pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH);
 
+                let pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH);
 
                 if (this.isDragging) {
                     pos.top = this.dragging.top;
-//                    Add rtl support
+
                     if (this.renderRtl) {
                         pos.right = this.dragging.left;
                     } else {
                         pos.left = this.dragging.left;
                     }
                 }
+
                 if (this.isResizing) {
                     pos.width = this.resizing.width;
                     pos.height = this.resizing.height;
                 }
 
                 let style;
-                // CSS Transforms support (default)
                 if (this.useCssTransforms) {
-//                    Add rtl support
                     if (this.renderRtl) {
                         style = setTransformRtl(pos.top, pos.right, pos.width, pos.height);
                     } else {
                         style = setTransform(pos.top, pos.left, pos.width, pos.height);
                     }
-
-                } else { // top,left (slow)
-//                    Add rtl support
+                } else {
                     if (this.renderRtl) {
                         style = setTopRight(pos.top, pos.right, pos.width, pos.height);
                     } else {
@@ -413,7 +414,6 @@
                         this.isResizing = true;
                         break;
                     case "resizemove":
-//                        console.log("### resize => " + event.type + ", lastW=" + this.lastW + ", lastH=" + this.lastH);
                         const coreEvent = createCoreData(this.lastW, this.lastH, x, y);
                         if (this.renderRtl) {
                             newSize.width = this.resizing.width - coreEvent.deltaX;
@@ -422,15 +422,12 @@
                         }
                         newSize.height = this.resizing.height + coreEvent.deltaY;
 
-                        ///console.log("### resize => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
                         this.resizing = newSize;
                         break;
                     case "resizeend":
-                        //console.log("### resize end => x=" +this.innerX + " y=" + this.innerY + " w=" + this.innerW + " h=" + this.innerH);
                         pos = this.calcPosition(this.innerX, this.innerY, this.innerW, this.innerH);
                         newSize.width = pos.width;
                         newSize.height = pos.height;
-//                        console.log("### resize end => " + JSON.stringify(newSize));
                         this.resizing = null;
                         this.isResizing = false;
                         break;
@@ -507,8 +504,6 @@
                             newPosition.left = clientRect.left - parentRect.left;
                         }
                         newPosition.top = clientRect.top - parentRect.top;
-//                        console.log("### drag end => " + JSON.stringify(newPosition));
-//                        console.log("### DROP: " + JSON.stringify(newPosition));
                         this.dragging = null;
                         this.isDragging = false;
                         shouldUpdate = true;
@@ -522,9 +517,6 @@
                             newPosition.left = this.dragging.left + coreEvent.deltaX;
                         }
                         newPosition.top = this.dragging.top + coreEvent.deltaY;
-//                        console.log("### drag => " + event.type + ", x=" + x + ", y=" + y);
-//                        console.log("### drag => " + event.type + ", deltaX=" + coreEvent.deltaX + ", deltaY=" + coreEvent.deltaY);
-//                        console.log("### drag end => " + JSON.stringify(newPosition));
                         this.dragging = newPosition;
                         break;
                 }
@@ -606,7 +598,6 @@
             // Helper for generating column width
             calcColWidth() {
                 const colWidth = (this.containerWidth - (this.margin[0] * (this.cols + 1))) / this.cols;
-               // console.log("### COLS=" + this.cols + " COL WIDTH=" + colWidth + " MARGIN " + this.margin[0]);
                 return colWidth;
             },
 
@@ -647,9 +638,6 @@
                 if (this.resizable) {
                     let maximum = this.calcPosition(0,0,this.maxW, this.maxH);
                     let minimum = this.calcPosition(0,0, this.minW, this.minH);
-
-                    // console.log("### MAX " + JSON.stringify(maximum));
-                    // console.log("### MIN " + JSON.stringify(minimum));
 
                     const opts = {
                         preserveAspectRatio: true,
