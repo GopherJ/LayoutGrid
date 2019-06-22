@@ -334,6 +334,11 @@
         word-wrap: break-word;
 
         position: relative;
+
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
     }
 
     .layout-grid-item-content {
