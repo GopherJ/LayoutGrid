@@ -85,6 +85,7 @@ const getters = {
 
         for (let i = 0, l = layout.length; i < l; i += 1) {
             const layoutItem = cloneLayoutItem(layout, i);
+            layoutItem.isLoading = false;
 
             switch (layoutItem.is) {
                 case 'd3-pie':
