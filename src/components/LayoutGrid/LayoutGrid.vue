@@ -18,6 +18,7 @@
                     :h="l.h"
                     :i="l.i"
                     :min-w="minW"
+                    :is-loading="l.isLoading"
                     @resize="(i, h, w) => onResize(i, h, w)"
                     @move="(i, x, y) => onMove(i, x, y)"
                     @moved="(i, x, y) => onMoved(i, x, y)"

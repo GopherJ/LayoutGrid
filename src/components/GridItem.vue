@@ -1,6 +1,6 @@
 <template>
     <div ref="item"
-         class="vue-grid-item"
+         class="vue-grid-item vld-parent"
          :class="{ 'vue-resizable' : resizable, 'resizing' : isResizing, 'vue-draggable-dragging' : isDragging, 'cssTransforms' : useCssTransforms, 'render-rtl' : renderRtl, 'disable-userselect': isDragging }"
          :style="style">
         <slot></slot>
@@ -74,7 +74,7 @@
         cursor: sw-resize;
         right: auto;
     }
-    
+
     .vue-grid-item.disable-userselect {
         user-select: none;
     }
@@ -83,6 +83,11 @@
     import {setTopLeft, setTopRight, setTransformRtl, setTransform, createMarkup, getLayoutItem} from '../utils/utils';
     import {getControlPosition, offsetXYFromParentOf, createCoreData} from '../utils/draggableUtils';
     import {getDocumentDir} from '../utils/DOM';
+    import Vue from 'vue';
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/vue-loading.css';
+
+    Vue.use(Loading);
 
     let interact = require("interactjs");
 
@@ -153,6 +158,11 @@
                 required: false,
                 default: 'a, button'
             },
+            isLoading: {
+                type: Boolean,
+                required: false,
+                default: false
+            }
         },
         inject: ["eventBus"],
         data: function () {
@@ -274,6 +284,23 @@
             this.createStyle();
         },
         watch: {
+            isLoading: function(n, o) {
+                if (n) {
+                    this.$vldLoader = this.$overlay.show({
+                        container: this.$refs.item,
+                        width: 84,
+                        height: 84,
+                        loader: 'bars',
+                        canCancel: false,
+                        color: '#CDE201',
+                        backgroundColor: '#000000',
+                        opacity: 0.5,
+                        zIndex: 1002,
+                    });
+                } else {
+                    this.$vldLoader.hide();
+                }
+            },
             isDraggable: function () {
                 this.draggable = this.isDraggable;
             },
