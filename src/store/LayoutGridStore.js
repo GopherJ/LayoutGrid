@@ -109,14 +109,11 @@ const getters = {
                     layoutItem.data.data = null;
                     break;
                 case 'd3-l-heat':
-                    layoutItem.data.data = [];
+                    layoutItem.data.data = {};
                     layoutItem.data.indoorMaps = [];
                     break;
                 case 'd3-l-choropleth':
-                    layoutItem.data.data = {
-                        type: 'FeatureCollection',
-                        features: []
-                    };
+                    layoutItem.data.data = {};
                     layoutItem.data.indoorMaps = [];
                     break;
                 default:

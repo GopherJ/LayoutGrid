@@ -267,9 +267,9 @@
                     case 'd3-sankey-circular':
                         return isArrayAndHasLength(l.data.nodes) && isArrayAndHasLength(l.data.links);
                     case 'd3-l-heat':
-                        return isArrayAndHasLength(l.data.data);
+                        return isObject(l.data.data) && Object.keys(l.data.data).length;
                     case 'd3-l-choropleth':
-                        return isGeoJsonFeatureCollectionAndHasFeatures(l.data.data);
+                        return isObject(l.data.data) && Object.keys(l.data.data).length;
                     case 'd3-metric':
                     case 'd3-circle':
                         return !isEmpty(l.data.data);
