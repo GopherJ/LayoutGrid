@@ -286,7 +286,7 @@
         watch: {
             isLoading: function(n, o) {
                 if (n) {
-                    this.$vldLoader = this.$overlay.show({
+                    this.$vldLoader = this.$loading.show({
                         container: this.$refs.item,
                         width: 84,
                         height: 84,

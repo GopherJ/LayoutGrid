@@ -100,7 +100,6 @@
     import Table from './Table';
     import GridItem from '../GridItem';
     import GridLayout from '../GridLayout';
-    import UCard from '../UCard';
 
     const isObject            = o   => String(o) === '[object Object]';
     const isArrayAndHasLength = arr => Array.isArray(arr) && arr.length > 0;
