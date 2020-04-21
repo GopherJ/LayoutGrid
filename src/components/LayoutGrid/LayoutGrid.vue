@@ -89,7 +89,7 @@
             </grid-item>
         </grid-layout>
 
-        <div class="layout-grid-empty" v-else>{{ $t('UAnalytics.dashboard.noChart') }}</div>
+        <div class="layout-grid-empty" v-else>No Chart</div>
     </div>
 </template>
 
